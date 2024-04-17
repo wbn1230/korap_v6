@@ -1,0 +1,59 @@
+.map_toggle_button {
+  position: fixed;
+  top: 70px;
+  right: 25px;
+  z-index: 1;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
+  background-color: #404040;
+  color: white;
+  width: 166px;
+  height: 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-size: 15px;
+  font-family: "NanumSquare", sans-serif;
+  font-weight: bold;
+}
+
+.map_toggle_button:hover {
+  opacity: 1;
+}
+#map_tg_name {
+  margin-left: 23px;
+}
+#map_tg_icon {
+  margin-right: 14px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+#map_exp {
+  position: fixed;
+  z-index: 2;
+  top: 112px;
+  right: 25px;
+  width: 166px;
+  border: none;
+  border-radius: 5px;
+  background-color: #8c8c8c;
+  color: white;
+}
+#map_exp ul {
+  list-style-type: none;
+  padding-inline-start: 18px;
+  margin-block-start: 15px;
+  margin-block-end: 15px;
+  font-size: 14px;
+  font-weight: bold;
+}
+#map_exp li {
+  padding: 5px 5px;
+}
+
+#map_exp li:hover {
+  color: black;
+  cursor: pointer;
+}
