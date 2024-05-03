@@ -50,25 +50,24 @@
 
 .indicator {
   background: rgb(255, 255, 255);
-  border: solid 1px;
+  border: solid 1px #8c8c8c;
   border-radius: 5px;
-  border-color: #8c8c8c;
   font-size: 12px;
+  margin-left: 5px;
   cursor: pointer;
   padding: 10px;
-  width: 190px;
-  justify-content: center;
-  align-items: center;
+  width: 160px;
+  text-align: center;
 }
 
 .dropdown-content {
   display: none;
   position: absolute;
-  margin-left: 1px;
-  justify-content: center;
-  align-items: center;
+  border: solid 1px #8c8c8c;
+  border-radius: 5px;
+  right: 7%;
   top: 90%;
-  width: 91%;
+  width: 180px;
   background: none;
   z-index: 1;
   box-sizing: border-box;
@@ -87,17 +86,10 @@
 .dropdown-content button:hover {
   background-color: #fcfafa;
   border-color: #404040;
-  color: #404040;
 }
 
 .accdropdown:hover .dropdown-content {
   display: block;
-}
-
-.accdropdown:hover .indicator {
-  background-color: #fcfafa;
-  border-color: #404040;
-  color: #404040;
 }
 
 /* //////////////////////////////////////////////////// */
@@ -134,7 +126,7 @@
 .bike {
   width: 55px;
   height: 75px;
-  font-size: 25px;
+  font-size: 26px;
   color: #8c8c8c;
 }
 

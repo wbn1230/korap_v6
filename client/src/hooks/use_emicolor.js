@@ -1,8 +1,19 @@
 import useInfo from "../hooks/use-info";
 
 const useEmiColor = () => {
-  const { info, taasInfo, tmsInfo, depth1, rdepth, idepth, rcbx, icbx } =
-    useInfo();
+  const {
+    info,
+    taasInfo,
+    tmsInfo,
+    depth1,
+    rdepth,
+    idepth,
+    pdepth,
+    rcbx,
+    icbx,
+    searchedRoadNo,
+    selectedRoad,
+  } = useInfo();
   const getEmiVColor = (emi) => {
     if (taasInfo.every((val) => val === false)) {
       if (0 === emi) {
@@ -263,290 +274,354 @@ const useEmiColor = () => {
     }
   };
 
-  const getRaccColor = (p) => {
-    //temp
+  const getPaccColor = (p) => {
     if (rdepth.index === 4) {
-      if (rcbx.every((val) => val === false)) {
-        return [117, 147, 169, 255 * 0.2];
-      } else if (p.road_no === 67 || p.road_no === 46 || p.road_no === 77) {
-        return [255, 0, 0, 255 * 0.8];
+      if (searchedRoadNo.type === "nodeid") {
+        if (searchedRoadNo.value === p.fromnodeid)
+          return [255, 0, 255, 255 * 0.7];
+        else return [117, 147, 169, 255 * 0.2];
       } else {
-        return [0, 255, 0, 255 * 0.3];
-      }
-    }
-
-    if (rdepth.index === 1) {
-      // 기본지표 1
-      if (rcbx.every((val) => val === false)) {
-        return [117, 147, 169, 255 * 0.2];
-      }
-      if (rdepth.type === "car") {
-        // L_CAR_BI_1
-        if (0 <= p.l_car_bi_1 && p.l_car_bi_1 < 0.003) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.003 <= p.l_car_bi_1 && p.l_car_bi_1 < 0.012) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.012 <= p.l_car_bi_1 && p.l_car_bi_1 < 0.029) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.029 <= p.l_car_bi_1 && p.l_car_bi_1 < 0.083) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.0823 <= p.l_car_bi_1 && p.l_car_bi_1 < 0.19) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
-          );
-        }
-      } else if (rdepth.type === "walk") {
-        // L_PED_BI_1
-        if (0 >= p.l_ped_bi_1) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0 < p.l_ped_bi_1 && p.l_ped_bi_1 < 0.002) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.002 <= p.l_ped_bi_1 && p.l_ped_bi_1 < 0.005) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.005 <= p.l_ped_bi_1 && p.l_ped_bi_1 < 0.014) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.014 <= p.l_ped_bi_1 && p.l_ped_bi_1 < 0.04) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
-          );
-        }
-      } else if (rdepth.type === "bike") {
-        // L_CYC_BI_1
-        if (0 >= p.l_cyc_bi_1) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0 < p.l_cyc_bi_1 && p.l_cyc_bi_1 < 0.001) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.001 <= p.l_cyc_bi_1 && p.l_cyc_bi_1 < 0.003) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.003 <= p.l_cyc_bi_1 && p.l_cyc_bi_1 < 0.007) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.0007 <= p.l_cyc_bi_1 && p.l_cyc_bi_1 < 0.03) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
-          );
-        }
-      }
-    } else if (rdepth.index === 2) {
-      /// 기본지표 2
-      if (rcbx.every((val) => val === false)) {
-        return [117, 147, 169, 255 * 0.2];
-      }
-      if (rdepth.type === "car") {
-        // L_CAR_BI_2
-        if (0 <= p.l_car_bi_2 && p.l_car_bi_2 < 0.0141) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.0141 <= p.l_car_bi_2 && p.l_car_bi_2 < 0.04707) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.04707 <= p.l_car_bi_2 && p.l_car_bi_2 < 0.10406) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.10406 <= p.l_car_bi_2 && p.l_car_bi_2 < 0.23738) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.23738 <= p.l_car_bi_2 && p.l_car_bi_2 < 0.54188) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
-          );
-        }
-      } else if (rdepth.type === "walk") {
-        // L_PED_BI_2
-        if (0 <= p.l_ped_bi_2 && p.l_ped_bi_2 < 0.003) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.003 <= p.l_ped_bi_2 && p.l_ped_bi_2 < 0.013) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.013 <= p.l_ped_bi_2 && p.l_ped_bi_2 < 0.032) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.032 <= p.l_ped_bi_2 && p.l_ped_bi_2 < 0.113) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.113 <= p.l_ped_bi_2 && p.l_ped_bi_2 < 0.27) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
-          );
-        }
-      } else if (rdepth.type === "bike") {
-        // L_CYC_BI_2
-        if (0 <= p.l_cyc_bi_2 && p.l_cyc_bi_2 < 0.001) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.001 <= p.l_cyc_bi_2 && p.l_cyc_bi_2 < 0.005) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.005 <= p.l_cyc_bi_2 && p.l_cyc_bi_2 < 0.014) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.014 <= p.l_cyc_bi_2 && p.l_cyc_bi_2 < 0.038) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.038 <= p.l_cyc_bi_2 && p.l_cyc_bi_2 < 0.08) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
-          );
-        }
-      }
-    } else if (rdepth.index === 3) {
-      // 평균 사고 건수
-      if (rcbx.every((val) => val === false)) {
-        return [117, 147, 169, 255 * 0.2];
-      }
-      if (rdepth.type === "car") {
-        // L_CAR_ABS
-        if (0 <= p.l_car_abs && p.l_car_abs < 0.33642) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.33642 <= p.l_car_abs && p.l_car_abs < 1.33964) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (1.33964 <= p.l_car_abs && p.l_car_abs < 4.00281) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (4.00281 <= p.l_car_abs && p.l_car_abs < 13.0132) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (13.0132 <= p.l_car_abs && p.l_car_abs < 150.4113) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
-          );
-        }
-      } else if (rdepth.type === "walk") {
-        // L_PED_ABS
-        if (0 >= p.l_ped_abs) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0 <= p.l_ped_abs && p.l_ped_abs < 0.334) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.334 <= p.l_ped_abs && p.l_ped_abs < 1.333) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.1333 <= p.l_ped_abs && p.l_ped_abs < 3.667) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (3.667 <= p.l_ped_abs && p.l_ped_abs < 20.68) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
-          );
-        }
-      } else if (rdepth.type === "bike") {
-        // L_CYC_ABS
-        if (0 >= p.l_cyc_abs) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0 <= p.l_cyc_abs && p.l_cyc_abs < 0.3329) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.3329 <= p.l_cyc_abs && p.l_cyc_abs < 0.667) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (0.667 <= p.l_cyc_abs && p.l_cyc_abs < 1.667) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
-          );
-        } else if (1.667 <= p.l_cyc_abs && p.l_cyc_abs < 4.7) {
-          return (
-            rcbx.every((val) => val === false) ||
-            (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
-          );
-        }
+        if (searchedRoadNo.value === p.road_no) return [255, 0, 255, 255 * 0.7];
+        else return [117, 147, 169, 255 * 0.2];
       }
     } else {
-      return [0, 0, 0, 255 * 0.8];
+      if (pdepth === "car") {
+        // CAR
+        if (selectedRoad === p.road_no) {
+          // if (0 <= p.l_car_abs && p.l_car_abs < 0.33642) {
+          //   return [0, 175, 185];
+          // } else if (0.33642 <= p.l_car_abs && p.l_car_abs < 1.33964) {
+          //   return [121, 194, 165];
+          // } else if (1.33964 <= p.l_car_abs && p.l_car_abs < 4.00281) {
+          //   return [242, 212, 146];
+          // } else if (4.00281 <= p.l_car_abs && p.l_car_abs < 13.0132) {
+          //   return [233, 141, 120];
+          // } else if (13.0132 <= p.l_car_abs && p.l_car_abs < 150.4113) {
+          //   return [221, 0, 22];
+          // }
+          return [255, 50, 50, 255 * 0.8];
+        } else return [117, 147, 169, 255 * 0.2];
+      } else if (pdepth === "walk") {
+        // PED
+        if (selectedRoad === p.road_no) {
+          // if (0 >= p.l_ped_abs) {
+          //   return [0, 175, 185];
+          // } else if (0 <= p.l_ped_abs && p.l_ped_abs < 0.334) {
+          //   return [121, 194, 165];
+          // } else if (0.334 <= p.l_ped_abs && p.l_ped_abs < 1.333) {
+          //   return [242, 212, 146];
+          // } else if (0.1333 <= p.l_ped_abs && p.l_ped_abs < 3.667) {
+          //   return [233, 141, 120];
+          // } else if (3.667 <= p.l_ped_abs && p.l_ped_abs < 20.68) {
+          //   return [221, 0, 22];
+          // }
+          return [255, 50, 50, 255 * 0.8];
+        } else return [117, 147, 169, 255 * 0.2];
+      } else if (pdepth === "bike") {
+        // CYC
+        if (selectedRoad === p.road_no) {
+          // if (0 >= p.l_cyc_abs) {
+          //   return [0, 175, 185];
+          // } else if (0 <= p.l_cyc_abs && p.l_cyc_abs < 0.3329) {
+          //   return [121, 194, 165];
+          // } else if (0.3329 <= p.l_cyc_abs && p.l_cyc_abs < 0.667) {
+          //   return [242, 212, 146];
+          // } else if (0.667 <= p.l_cyc_abs && p.l_cyc_abs < 1.667) {
+          //   return [233, 141, 120];
+          // } else if (1.667 <= p.l_cyc_abs && p.l_cyc_abs < 4.7) {
+          //   return [221, 0, 22];
+          // }
+          return [255, 50, 50, 255 * 0.8];
+        } else return [117, 147, 169, 255 * 0.2];
+      }
+    }
+  };
+
+  const getRaccColor = (p) => {
+    if (rdepth.index === 4) {
+      if (searchedRoadNo.type === "nodeid") {
+        if (searchedRoadNo.value === p.fromnodeid)
+          return [255, 0, 255, 255 * 0.7];
+        else return [117, 147, 169, 255 * 0.2];
+      } else {
+        if (parseInt(searchedRoadNo.value, 10) === p.road_no)
+          return [255, 0, 255, 255 * 0.7];
+        else return [117, 147, 169, 255 * 0.2];
+      }
+    } else {
+      if (rdepth.index === 1) {
+        // 기본지표 1
+        if (rcbx.every((val) => val === false)) {
+          return [117, 147, 169, 255 * 0.2];
+        }
+        if (rdepth.type === "car") {
+          // L_CAR_BI_1
+          if (0 <= p.l_car_bi_1 && p.l_car_bi_1 < 0.003) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.003 <= p.l_car_bi_1 && p.l_car_bi_1 < 0.012) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.012 <= p.l_car_bi_1 && p.l_car_bi_1 < 0.029) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.029 <= p.l_car_bi_1 && p.l_car_bi_1 < 0.083) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.0823 <= p.l_car_bi_1 && p.l_car_bi_1 < 0.19) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
+            );
+          }
+        } else if (rdepth.type === "walk") {
+          // L_PED_BI_1
+          if (0 >= p.l_ped_bi_1) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0 < p.l_ped_bi_1 && p.l_ped_bi_1 < 0.002) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.002 <= p.l_ped_bi_1 && p.l_ped_bi_1 < 0.005) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.005 <= p.l_ped_bi_1 && p.l_ped_bi_1 < 0.014) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.014 <= p.l_ped_bi_1 && p.l_ped_bi_1 < 0.04) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
+            );
+          }
+        } else if (rdepth.type === "bike") {
+          // L_CYC_BI_1
+          if (0 >= p.l_cyc_bi_1) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0 < p.l_cyc_bi_1 && p.l_cyc_bi_1 < 0.001) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.001 <= p.l_cyc_bi_1 && p.l_cyc_bi_1 < 0.003) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.003 <= p.l_cyc_bi_1 && p.l_cyc_bi_1 < 0.007) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.0007 <= p.l_cyc_bi_1 && p.l_cyc_bi_1 < 0.03) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
+            );
+          }
+        }
+      } else if (rdepth.index === 2) {
+        /// 기본지표 2
+        if (rcbx.every((val) => val === false)) {
+          return [117, 147, 169, 255 * 0.2];
+        }
+        if (rdepth.type === "car") {
+          // L_CAR_BI_2
+          if (0 <= p.l_car_bi_2 && p.l_car_bi_2 < 0.0141) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.0141 <= p.l_car_bi_2 && p.l_car_bi_2 < 0.04707) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.04707 <= p.l_car_bi_2 && p.l_car_bi_2 < 0.10406) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.10406 <= p.l_car_bi_2 && p.l_car_bi_2 < 0.23738) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.23738 <= p.l_car_bi_2 && p.l_car_bi_2 < 0.54188) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
+            );
+          }
+        } else if (rdepth.type === "walk") {
+          // L_PED_BI_2
+          if (0 <= p.l_ped_bi_2 && p.l_ped_bi_2 < 0.003) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.003 <= p.l_ped_bi_2 && p.l_ped_bi_2 < 0.013) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.013 <= p.l_ped_bi_2 && p.l_ped_bi_2 < 0.032) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.032 <= p.l_ped_bi_2 && p.l_ped_bi_2 < 0.113) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.113 <= p.l_ped_bi_2 && p.l_ped_bi_2 < 0.27) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
+            );
+          }
+        } else if (rdepth.type === "bike") {
+          // L_CYC_BI_2
+          if (0 <= p.l_cyc_bi_2 && p.l_cyc_bi_2 < 0.001) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.001 <= p.l_cyc_bi_2 && p.l_cyc_bi_2 < 0.005) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.005 <= p.l_cyc_bi_2 && p.l_cyc_bi_2 < 0.014) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.014 <= p.l_cyc_bi_2 && p.l_cyc_bi_2 < 0.038) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.038 <= p.l_cyc_bi_2 && p.l_cyc_bi_2 < 0.08) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
+            );
+          }
+        }
+      } else if (rdepth.index === 3) {
+        // 평균 사고 건수
+        if (rcbx.every((val) => val === false)) {
+          return [117, 147, 169, 255 * 0.2];
+        }
+        if (rdepth.type === "car") {
+          // L_CAR_ABS
+          if (0 <= p.l_car_abs && p.l_car_abs < 0.33642) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.33642 <= p.l_car_abs && p.l_car_abs < 1.33964) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (1.33964 <= p.l_car_abs && p.l_car_abs < 4.00281) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (4.00281 <= p.l_car_abs && p.l_car_abs < 13.0132) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (13.0132 <= p.l_car_abs && p.l_car_abs < 150.4113) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
+            );
+          }
+        } else if (rdepth.type === "walk") {
+          // L_PED_ABS
+          if (0 >= p.l_ped_abs) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0 <= p.l_ped_abs && p.l_ped_abs < 0.334) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.334 <= p.l_ped_abs && p.l_ped_abs < 1.333) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (1.333 <= p.l_ped_abs && p.l_ped_abs < 3.667) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (3.667 <= p.l_ped_abs && p.l_ped_abs < 20.68) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
+            );
+          }
+        } else if (rdepth.type === "bike") {
+          // L_CYC_ABS
+          if (0 >= p.l_cyc_abs) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[4] ? [0, 175, 185] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0 <= p.l_cyc_abs && p.l_cyc_abs < 0.3329) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[3] ? [121, 194, 165] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.3329 <= p.l_cyc_abs && p.l_cyc_abs < 0.667) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[2] ? [242, 212, 146] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (0.667 <= p.l_cyc_abs && p.l_cyc_abs < 1.667) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[1] ? [233, 141, 120] : [117, 147, 169, 255 * 0.2])
+            );
+          } else if (1.667 <= p.l_cyc_abs && p.l_cyc_abs < 4.7) {
+            return (
+              rcbx.every((val) => val === false) ||
+              (rcbx[0] ? [221, 0, 22] : [117, 147, 169, 255 * 0.2])
+            );
+          }
+        }
+      } else {
+        return [0, 0, 0, 255 * 0.8];
+      }
     }
   };
 
@@ -993,6 +1068,7 @@ const useEmiColor = () => {
     getTmsdColor,
     getRaccColor,
     getIaccColor,
+    getPaccColor,
   };
 };
 

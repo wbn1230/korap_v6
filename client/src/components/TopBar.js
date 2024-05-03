@@ -2,7 +2,7 @@ import { useState } from "react";
 import "./TopBar.css";
 import Modal from "./Modal";
 import { CgFileDocument } from "react-icons/cg";
-import guide from "../img/guide2.PNG";
+import guide from "../img/guide0429.png";
 import LogoSVG from "../img/Logo.svg";
 import LBacc from "./LBacc";
 import LBcurr from "./LBcurr";
@@ -21,6 +21,8 @@ const TopBar = () => {
     setAcclayer2,
     setRcbx,
     setIcbx,
+    setShowProfile,
+    setShowChart,
   } = useInfo();
   const [showModal, setShowModal] = useState(false);
 
@@ -34,18 +36,23 @@ const TopBar = () => {
 
   const modal = (
     <Modal onClose={handleModClose}>
-      <img src={guide} alt="guide1" height="700%" />
+      <img src={guide} alt="guide1" height="800%" />
     </Modal>
   );
 
   const handleMenuClick = (menu) => {
     setActiveMenu(menu);
-    if (menu === "acc" && !acclayer1 && !acclayer2) {
-      setDepth1(null);
-      setDepth2(null);
-      setRcbx([false, false, false, false, false]);
-      setIcbx([false, false, false, false, false]);
+    if (menu === "acc") {
+      setShowProfile(false);
+      setShowChart(false);
+      if (!acclayer1 && !acclayer2) {
+        setDepth1(null);
+        setDepth2(null);
+        setRcbx([false, false, false, false, false]);
+        setIcbx([false, false, false, false, false]);
+      }
     } else if (menu === "curr") {
+      setShowProfile(false);
       setDepth1(null);
       setDepth2(null);
       setAcclayer1(false);
@@ -77,14 +84,12 @@ const TopBar = () => {
 
       {activeMenu === "acc" && (
         <div>
-          {" "}
-          <LBacc />{" "}
+          <LBacc />
         </div>
       )}
       {activeMenu === "curr" && (
         <div>
-          {" "}
-          <LBcurr />{" "}
+          <LBcurr />
         </div>
       )}
     </div>

@@ -16,6 +16,7 @@ const tables = {
   bpoint: "taas_bicycle_n103",
   roadacc: "lp",
   icacc: "np",
+  risk: "riskprofile",
 };
 const toGeoJson = (sqlRows) => {
   const obj = {
@@ -83,7 +84,7 @@ const getBp = async () => {
     console.log(err);
   }
 };
-// ADDED -----------------------------------------------------------
+// ADDED REQUEST METHODS -----------------------------------------------------------
 const getLp = async () => {
   const qry = `SELECT uid, geom_json, fromnodeid, tonodeid, length_l1, l_aadt, l_car_abs, l_car_bi_1, l_car_bi_2, l_ped_abs, l_ped_bi_1, l_ped_bi_2, l_cyc_abs, l_cyc_bi_1, l_cyc_bi_2, road_no FROM ${tables["roadacc"]}`;
   try {
@@ -106,6 +107,17 @@ const getNp = async () => {
   }
 };
 
+const getRp = async () => {
+  const qry = `SELECT uid_l4, road_name, geom_json, length, slope, road_no, width, facil_kind, max_spd, barrier, num_cross, auto_exclu, oneway, fromnodeid, tonodeid, l_car_abs, l_car_bi_1, l_car_bi_2, l_ped_abs, l_ped_bi_1, l_ped_bi_2, l_cyc_abs, l_cyc_bi_1, l_cyc_bi_2 FROM ${tables["risk"]}`;
+  try {
+    const result = await client.query(qry);
+    // console.log(result);
+    return toGeoJson(result.rows);
+  } catch (err) {
+    console.log(err);
+  }
+};
+
 module.exports = {
   getRoadAll2: getRoadAll2,
   getEmi: getEmi,
@@ -114,4 +126,5 @@ module.exports = {
   getBp: getBp,
   getLp: getLp,
   getNp: getNp,
+  getRp: getRp,
 };

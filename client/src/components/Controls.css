@@ -29,3 +29,31 @@
 .toggle_button:hover {
   opacity: 1;
 }
+
+/* //////////////////////////////////////////////////// */
+
+.search_input {
+  display: flex;
+  flex-direction: column;
+  position: fixed;
+  top: 340px;
+  right: 25px;
+}
+.search_input input {
+  width: 120px;
+  border: 1px solid #ccc;
+  margin-left: auto;
+}
+
+.searchLabel {
+  padding: 2px;
+  cursor: pointer;
+  font-size: 14px;
+  color: #333;
+}
+
+.searchLabel input[type="radio"] {
+  width: 10px;
+  height: 10px;
+  margin-right: 3px;
+}

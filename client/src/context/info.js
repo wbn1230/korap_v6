@@ -14,6 +14,14 @@ function InfoProvider({ children }) {
     onewayOps: { name: "일방통행유무", selected: [], checkboxes: [] },
   });
 
+  const INITIAL_VIEW_STATE = {
+    longitude: 127.2,
+    latitude: 37.0,
+    zoom: 6.920000000000002,
+    bearing: 0,
+    pitch: 0,
+  };
+
   const [taasInfo, setTaasInfo] = useState([]);
   const [tmsInfo, setTmsInfo] = useState([]);
   const [tmsdInfo, setTmsdInfo] = useState([]);
@@ -24,23 +32,36 @@ function InfoProvider({ children }) {
   const [isSelect, setIsSelect] = useState(false);
   const [isFilter, setIsFilter] = useState(false);
 
+  const [view, setView] = useState(INITIAL_VIEW_STATE);
   const [LD, setLD] = useState(false);
   const [data, setData] = useState({ nroad: null, emiroad: null });
   const [rdata, setRdata] = useState(null);
   const [idata, setIdata] = useState(null);
+  const [pdata, setPdata] = useState(null);
 
   const [rdepth, setRdepth] = useState({ index: 3, type: "car" });
   const [idepth, setIdepth] = useState({ index: 3, type: "car" });
+  const [pdepth, setPdepth] = useState("car");
 
   const [activeMenu, setActiveMenu] = useState("acc");
   const [acclayer1, setAcclayer1] = useState(false);
   const [acclayer2, setAcclayer2] = useState(false);
+  const [showProfile, setShowProfile] = useState(false);
+  const [showChart, setShowChart] = useState(false);
 
   const [rcbx, setRcbx] = useState([false, false, false, false, false]);
   const [icbx, setIcbx] = useState([false, false, false, false, false]);
 
   const [userHasInteractedR, setUserHasInteractedR] = useState(false);
   const [userHasInteractedI, setUserHasInteractedI] = useState(false);
+
+  const [searchedRoadNo, setSearchedRoadNo] = useState({
+    type: null,
+    value: null,
+  });
+
+  const [selectedRoad, setSelectedRoad] = useState("");
+  const [pointer, setPointer] = useState(null);
 
   return (
     <InfoContext.Provider
@@ -61,10 +82,15 @@ function InfoProvider({ children }) {
         setRdepth,
         idepth,
         setIdepth,
+        pdepth,
+        setPdepth,
         isFilter,
         setIsFilter,
         tmsdInfo,
         setTmsdInfo,
+        view,
+        setView,
+        INITIAL_VIEW_STATE,
         LD,
         setLD,
         data,
@@ -73,12 +99,18 @@ function InfoProvider({ children }) {
         setRdata,
         idata,
         setIdata,
+        pdata,
+        setPdata,
         activeMenu,
         setActiveMenu,
         acclayer1,
         setAcclayer1,
         acclayer2,
         setAcclayer2,
+        showProfile,
+        setShowProfile,
+        showChart,
+        setShowChart,
         rcbx,
         setRcbx,
         icbx,
@@ -87,6 +119,12 @@ function InfoProvider({ children }) {
         setUserHasInteractedR,
         userHasInteractedI,
         setUserHasInteractedI,
+        searchedRoadNo,
+        setSearchedRoadNo,
+        selectedRoad,
+        setSelectedRoad,
+        pointer,
+        setPointer,
       }}
     >
       {children}

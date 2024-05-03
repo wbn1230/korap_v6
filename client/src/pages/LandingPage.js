@@ -1,6 +1,6 @@
 import React, { useMemo, useState, useEffect, useCallback } from "react";
 import { Map } from "react-map-gl";
-import DeckGL, { GeoJsonLayer } from "deck.gl";
+import DeckGL, { GeoJsonLayer, ScatterplotLayer } from "deck.gl";
 import "mapbox-gl/dist/mapbox-gl.css"; //remove console log error
 import "./LandingPage.css";
 import dissolvedRoad from "../National_Road_Dissolved3.json";
@@ -15,16 +15,7 @@ import TopBar from "../components/TopBar";
 const MAPBOX_ACCESS_TOKEN =
   "pk.eyJ1IjoicmVkc2lsdmVyNTIyIiwiYSI6ImNsaHl4enpjNzE4N3Eza3Bjemk3MTc1cDYifQ.EL1F3mAAhdlX1du8lCLDGw";
 
-const INITIAL_VIEW_STATE = {
-  longitude: 126.8,
-  latitude: 36.1,
-  zoom: 6.420000000000002,
-  bearing: 0,
-  pitch: 0,
-};
-
 function LandingPage() {
-  const [view, setView] = useState(INITIAL_VIEW_STATE);
   const { getTooltip } = useTooltip();
   const {
     info,
@@ -33,13 +24,21 @@ function LandingPage() {
     depth1,
     depth2,
     isFilter,
+    view,
+    setView,
+    INITIAL_VIEW_STATE,
     LD,
     data,
     rdata,
     idata,
+    pdata,
     activeMenu,
     acclayer1,
     acclayer2,
+    showProfile,
+    selectedRoad,
+    pointer,
+    pdepth,
     rdepth,
     rcbx,
     idepth,
@@ -54,6 +53,7 @@ function LandingPage() {
     getTmsdColor,
     getRaccColor,
     getIaccColor,
+    getPaccColor,
   } = useEmiColor();
   const [hoveredItem, setHoveredItem] = useState(null);
   const [length, setLength] = useState(null);
@@ -150,7 +150,7 @@ function LandingPage() {
         isFilter &&
         view.zoom >= 6 &&
         depth1 === "TAAS",
-      // onClick: (i) => console.log(i),
+      onClick: (i) => console.log(i),
       updateTriggers: {
         getLineColor: [taasInfo, depth2],
       },
@@ -202,16 +202,16 @@ function LandingPage() {
       stroked: true,
       filled: true,
       pointType: "circle",
-      lineWidthScale: 20,
-      lineWidthMaxPixels: 3,
-      pointRadiusMinPixels: 3,
+      lineWidthScale: 10,
+      lineWidthMaxPixels: 2,
+      pointRadiusMinPixels: 2,
       pointRadiusMaxPixels: 3,
       getFillColor: [229, 252, 246],
-      getLineColor: [59, 60, 64],
+      getLineColor: [60, 60, 60],
       getPointRadius: 100,
       // pickable: true,
-      autoHighlight: true,
-      onHover: onHover,
+      // onHover: onHover,
+      // autoHighlight: true,
       // highlightColor: [255, 0, 0, 200],
       visible: activeMenu === "curr" && view.zoom >= 9.7,
     });
@@ -361,7 +361,7 @@ function LandingPage() {
     activeMenu,
   ]);
 
-  // NP, LP Layers //////////////////////////////////////////////////////////////////////
+  // NP, LP, RP Layers //////////////////////////////////////////////////////////////////////
 
   const layer8 = useMemo(() => {
     if (!rdata) return null;
@@ -381,7 +381,12 @@ function LandingPage() {
       autoHighlight: true,
       onHover: onHover,
       onClick: (i) => console.log(i),
-      visible: activeMenu === "acc" && isFilter && view.zoom >= 6 && acclayer1,
+      visible:
+        activeMenu === "acc" &&
+        isFilter &&
+        view.zoom >= 6 &&
+        acclayer1 &&
+        !showProfile,
       updateTriggers: {
         getLineColor: [rdepth, rcbx],
       },
@@ -392,6 +397,7 @@ function LandingPage() {
     view.zoom,
     activeMenu,
     acclayer1,
+    showProfile,
     getRaccColor,
     rdepth,
     rcbx,
@@ -415,7 +421,12 @@ function LandingPage() {
       autoHighlight: true,
       getPointRadius: getDynamicPointRadius,
       onHover: onHover,
-      visible: activeMenu === "acc" && isFilter && view.zoom >= 6 && acclayer2,
+      visible:
+        activeMenu === "acc" &&
+        isFilter &&
+        view.zoom >= 6 &&
+        acclayer2 &&
+        !showProfile,
       onClick: (i) => console.log(i, icbx),
       updateTriggers: {
         getFillColor: [idepth, icbx],
@@ -433,7 +444,90 @@ function LandingPage() {
     getIaccColor,
     idepth,
     icbx,
+    showProfile,
   ]);
+
+  const layer10 = useMemo(() => {
+    if (!pdata) return null;
+
+    return new GeoJsonLayer({
+      id: "riskprof",
+      data: pdata.mergedGJ,
+      lineWidthScale: 1000,
+      lineWidthMaxPixels: 5,
+      pointRadiusMinPixels: 3,
+      pointRadiusMaxPixels: 7,
+      getLineColor: (d) => {
+        return getPaccColor(d.properties);
+      },
+      pickable: true,
+      autoHighlight: true,
+      onHover: onHover,
+      onClick: (i) => console.log(i),
+      visible:
+        activeMenu === "acc" && isFilter && view.zoom >= 6 && showProfile,
+      updateTriggers: {
+        getLineColor: [pdepth, rdepth, selectedRoad],
+      },
+    });
+  }, [
+    pdata,
+    pdepth,
+    rdepth,
+    isFilter,
+    view.zoom,
+    activeMenu,
+    showProfile,
+    selectedRoad,
+    getPaccColor,
+  ]);
+
+  const layer11 = useMemo(() => {
+    if (!pdata || !pointer) return null;
+
+    const nodeFeature = pdata.mergedGJ.features.find(
+      (feature) => feature.properties.fromnodeid === pointer
+    );
+
+    const pointData = nodeFeature ? [nodeFeature] : [];
+
+    return new ScatterplotLayer({
+      id: "pointer",
+      data: pointData,
+      getPosition: (d) => d.geometry.coordinates[0][0],
+      getRadius:
+        view.zoom <= 8
+          ? 3000
+          : view.zoom <= 9
+          ? 2000
+          : view.zoom <= 10
+          ? 1000
+          : view.zoom <= 11
+          ? 500
+          : view.zoom <= 12
+          ? 200
+          : view.zoom <= 14
+          ? 100
+          : view.zoom <= 15
+          ? 50
+          : view.zoom <= 17
+          ? 20
+          : 5,
+      // 2869.23 / (view.zoom - 7.07),
+      lineWidthScale: 10,
+      getFillColor: [0, 170, 255, 255 * 0.85],
+      stroked: true,
+      lineWidthMaxPixels: 2,
+      lineWidthMinPixels: 2,
+      getLineColor: [255, 255, 255],
+      pickable: false,
+      visible:
+        activeMenu === "acc" && isFilter && view.zoom >= 6 && showProfile,
+      updateTriggers: {
+        getPosition: [pointer],
+      },
+    });
+  }, [pdata, pointer, activeMenu, isFilter, showProfile, view.zoom]);
 
   const layers = [
     layer0,
@@ -446,6 +540,8 @@ function LandingPage() {
     layer7,
     layer8,
     layer9,
+    layer10,
+    layer11,
   ];
 
   // 사고위험지도 setLength

@@ -30,6 +30,9 @@ const requestType = {
   getNp: async function () {
     return await dbRequest.getNp();
   },
+  getRp: async function () {
+    return await dbRequest.getRp();
+  },
 };
 //--------------------------------------------------------------------------------------
 ////////////////////////////////////////////////////////////////////////////////////////
@@ -109,6 +112,17 @@ app.get("/np", async (req, res) => {
   } catch (err) {
     console.error(err);
     res.status(500).send("error fetching np");
+  }
+});
+
+app.get("/riskprofile", async (req, res) => {
+  try {
+    const rtrvd = await requestType["getRp"]();
+    console.log("rpfetched");
+    res.send(rtrvd);
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("error fetching rp");
   }
 });
 

@@ -24,15 +24,13 @@ align-items: center; // 상하 정렬 */
   transform: translateX(-220px);
 }
 
+/* //////////////////////////////////////////////////// */
+
 .riskprofile_div {
   position: relative;
-  /*   border-top: dotted 1px black; */
-  /* background-color: #c1bfbf; */
   width: 80%;
-  z-index: 2;
   display: flex;
   justify-content: space-around;
-  padding: 5px;
 }
 
 .data_button {
@@ -44,26 +42,27 @@ align-items: center; // 상하 정렬 */
   border-radius: 4px;
   cursor: pointer;
   padding: 2px;
+  margin-bottom: 10px;
 }
 .data_button:hover {
   background-color: #b3b3b3;
   color: #404040;
 }
 
-.graph {
+.profile {
   width: 65px;
   height: 60px;
   font-size: 250%;
   color: #404040;
 }
-.graph .graph_text {
+.profile .profile_text {
   visibility: hidden;
   position: absolute;
   background-color: rgba(255, 255, 255, 0.8);
   color: #808080;
-  width: 40%;
+  width: 55%;
   bottom: 100%;
-  padding: 10px;
+  padding: 6px;
   border-radius: 0;
   border: solid 2px #cccccc;
   text-align: center;
@@ -71,7 +70,7 @@ align-items: center; // 상하 정렬 */
   /*   line-height: 1.2; */
   z-index: 1;
 }
-.graph:hover .graph_text {
+.profile:hover .profile_text {
   visibility: visible;
 }
 
@@ -88,7 +87,7 @@ align-items: center; // 상하 정렬 */
   color: #808080;
   width: 40%;
   bottom: 100%;
-  padding: 10px;
+  padding: 8px;
   border-radius: 0;
   border: solid 2px #cccccc;
   text-align: center;
@@ -104,33 +103,150 @@ align-items: center; // 상하 정렬 */
   border: solid 2px #cccccc;
   background-color: white;
   position: fixed;
-  bottom: 200px;
-  left: 240px;
-  padding-top: 10px;
-  padding-right: 20px;
-  width: 85%;
-  max-width: 1250px;
-  height: 70%;
-  max-height: 600px;
-  /* overflow-x: auto;
-  min-width: 500px; */
+  left: 221px;
+  width: calc(100vw - 220px);
+  height: calc(100vh - 55px);
+  overflow-x: auto;
+  z-index: 1;
+}
+
+#legend {
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  align-items: center;
+  margin-top: 5px;
+  font-size: 10pt;
+}
+
+/* input[type="checkbox"] {
+  accent-color: #666;
+}
+
+input[type="checkbox"]:checked {
+  background-color: #666; 
+}
+
+input[type="checkbox"] + label {
+  cursor: pointer;
+  padding-left: 5px;
+} */
+
+.checkbox-wrapper input[type="checkbox"] {
+  display: none;
+}
+.checkbox-wrapper label {
+  position: relative;
+  padding-left: 20px;
+  padding-right: 10px;
+  cursor: pointer;
+}
+
+.checkbox-wrapper label:before {
+  content: "";
+  position: absolute;
+  left: 0;
+  top: 0;
+  width: 11px;
+  height: 11px;
+  border: 1px solid #ccc;
+  border-radius: 3px;
+}
+.checkbox-wrapper input[type="checkbox"]:checked + label:before {
+  background-color: #666;
+}
+.checkbox-wrapper-0 input[type="checkbox"]:checked + label:before {
+  background-color: #f00;
+}
+.checkbox-wrapper-1 input[type="checkbox"]:checked + label:before {
+  background-color: #004182;
+}
+.checkbox-wrapper-2 input[type="checkbox"]:checked + label:before {
+  background-color: #118df0;
 }
 
 .profile_container {
   border: solid 2px #cccccc;
   background-color: white;
   position: fixed;
-  bottom: 200px;
-  left: 240px;
+  top: 59%;
+  left: 221px;
   padding-top: 10px;
-  padding-right: 20px;
-  width: 85%;
-  max-width: 1250px;
-  height: 70%;
-  max-height: 600px;
-  /* overflow-x: auto;
-  min-width: 500px; */
+  width: calc(100vw - 220px);
+  height: calc(40vh);
 }
+/* //////////////////////////////////////////////////// */
+
+.rpoptions {
+  display: flex;
+}
+
+.rp_icon_container {
+  display: flex;
+  position: relative;
+  height: 20px;
+  width: 160px;
+  margin-right: 10px;
+  justify-content: center;
+  align-items: center;
+  background: none;
+}
+
+.rp_icon {
+  background: none;
+  border: solid 1px;
+  border-radius: 10px;
+  border-color: #8c8c8c;
+  cursor: pointer;
+  padding: 5px;
+}
+.rp_icon.car:hover,
+.rp_icon.walk:hover,
+.rp_icon.bike:hover {
+  background-color: #f6fbff;
+  border-color: #404040;
+  color: #202020;
+}
+
+.rp_icon.car.selected,
+.rp_icon.walk.selected,
+.rp_icon.bike.selected {
+  background-color: #f6fbff;
+  border-color: #404040;
+  color: #202020;
+}
+
+.rp_icon.car,
+.rp_icon.walk,
+.rp_icon.bike {
+  width: 48px;
+  height: 28px;
+  font-size: 13pt;
+  color: #8c8c8c;
+}
+
+.rp_roadNo {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 3px;
+  border-bottom: solid #cccccc 1px;
+  width: 80%;
+  margin-top: -5px;
+  color: #cccccc;
+}
+
+.rp_roadNo div {
+  flex-grow: 1;
+  color: #666666;
+  font-size: 10pt;
+}
+
+.rp_roadNo:hover {
+  background-color: #f6fbff;
+}
+
+/* //////////////////////////////////////////////////// */
 
 .toggle-button {
   position: fixed;

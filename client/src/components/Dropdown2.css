@@ -1,0 +1,33 @@
+.dropdown_container {
+  position: relative;
+  z-index: 2;
+}
+
+.dropdown2 {
+  position: absolute;
+  overflow: auto;
+  background-color: white;
+  top: 30%;
+  width: 80%;
+  height: 130px;
+  padding: 2px;
+  border: solid 1px #cccccc;
+}
+
+.dropdown2 ul {
+  list-style-type: none;
+  padding-inline-start: 0px;
+  margin-block-start: 2px;
+  margin-block-end: 2px;
+}
+
+.option-label2 {
+  display: block;
+  padding: 3px 5px;
+  cursor: pointer;
+  font-size: 9pt;
+}
+
+.option-label2:hover {
+  background-color: #f6fbff;
+}

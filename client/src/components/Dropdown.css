@@ -11,6 +11,7 @@
   padding-inline-start: 0px;
   margin-block-start: 2px;
   margin-block-end: 2px;
+  font-size: 10pt;
 }
 
 .option-checkbox {
@@ -25,7 +26,7 @@
 }
 
 .option-label:hover {
-  background-color: #e5fcf6;
+  background-color: #f6fbff;
 }
 
 .option-label.selected {
